@@ -44,3 +44,9 @@ To sync the bundle to a target namespace, label the namespace:
 ```bash
 kubectl label namespace YOUR_APP_NAMESPACE trust-manager-sync="true"
 ```
+
+## Sample Test App
+
+A complete sample application is provided to verify your CAS deployment. It spins up an Nginx server that gets a certificate from your CAS pool, and a curl client that connects to it securely using the root CA bundle distributed by `trust-manager`.
+
+For more details, see the [Sample App README](manifests/sample-app-test/README.md).

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl-client
+  namespace: sample-test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: curl-client
+  template:
+    metadata:
+      labels:
+        app: curl-client
+    spec:
+      containers:
+        - name: curl
+          image: curlimages/curl:8.22.0
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "========================================="
+                echo "1. Testing with -k (Insecure)"
+                echo "========================================="
+                curl -k https://nginx-server.sample-test-app.svc
+                echo ""
+                
+                echo "========================================="
+                echo "2. Testing with CA Bundle (Secure)"
+                echo "========================================="
+                curl --cacert /etc/ssl/certs/ca-certificates.crt https://nginx-server.sample-test-app.svc
+                echo ""
+                
+                echo "Sleeping for 10 seconds..."
+                sleep 10
+              done
+          volumeMounts:
+            # Mount the root CA bundle injected by trust-manager
+            - name: trust-bundle
+              mountPath: /etc/ssl/certs/ca-certificates.crt
+              subPath: trust-bundle.pem
+              readOnly: true
+      volumes:
+        - name: trust-bundle
+          configMap:
+            name: root-ca-bundle

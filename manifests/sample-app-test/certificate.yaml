@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginx-server-cert
+  namespace: sample-test-app
+spec:
+  secretName: nginx-server-tls
+  commonName: nginx-server.sample-test-app.svc
+  dnsNames:
+    - nginx-server.sample-test-app.svc
+    - nginx-server.sample-test-app.svc.cluster.local
+  duration: 1h
+  renewBefore: 5m
+  usages:
+    - server auth
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASClusterIssuer
+    name: generic-google-cas-issuer

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sample-test-app
+  labels:
+    # Triggers Trust Manager to inject the root-ca-bundle ConfigMap
+    bundle-role: platform-bundle-consumer
