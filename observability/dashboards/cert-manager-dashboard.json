@@ -1,17 +1,373 @@
 {
-  "displayName": "CAS & Cert-Manager Status",
-  "gridLayout": {
-    "widgets": [
+  "displayName": "Platform Certificate Lifecycle management",
+  "dashboardFilters": [
+    {
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "cluster_name",
+      "stringValue": "",
+      "templateVariable": "cluster"
+    }
+  ],
+  "mosaicLayout": {
+    "columns": 48,
+    "tiles": [
       {
-        "title": "Cert-Manager Pod Restarts",
-        "xyChart": {
-          "dataSets": [
-            {
-              "timeSeriesQuery": {
-                "prometheusQuery": "increase(kubernetes.io/anthos/container/restart_count{namespace_name=~\"cert-manager\",pod_name=~\"cert-manager.*\"}[1h])"
+        "height": 18,
+        "width": 24,
+        "xPos": 0,
+        "yPos": 0,
+        "widget": {
+          "title": "Uptime < 1 (Down Components)",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"external.googleapis.com/prometheus/up\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) < 1"
+                }
               }
-            }
-          ]
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 0,
+        "widget": {
+          "title": "Pods Not Running",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (\"cluster\",\"pod\",\"phase\")(avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_status_phase/gauge\",\"namespace\"=\"platform-clm\",\"phase\"!~\"Running\"}[${__interval}])) >=1"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster",
+                "visible": true
+              },
+              {
+                "column": "pod",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 0,
+        "yPos": 18,
+        "widget": {
+          "title": "Containers in CrashLoopBackOff",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_waiting_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*\",\"reason\"=~\"CrashLoopBackOff|ImagePullBackOff|ErrImagePull\"}[${__interval}]))"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster",
+                "visible": true
+              },
+              {
+                "column": "container",
+                "visible": true
+              },
+              {
+                "column": "reason",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "widget": {
+          "title": "Cert Read Errors",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"external.googleapis.com/prometheus/certwatcher_read_certificate_errors_total\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=\"trust-manager\"}[${__interval}])) > 0"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        },
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 18
+      },
+      {
+        "widget": {
+          "title": "Webhook Panics",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"external.googleapis.com/prometheus/controller_runtime_conversion_webhook_panics_total\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) > 0"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        },
+        "height": 18,
+        "width": 24,
+        "xPos": 0,
+        "yPos": 36
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 36,
+        "widget": {
+          "title": "CPU Utilization > 95%",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/cpu/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) * 100 > 95"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 0,
+        "yPos": 54,
+        "widget": {
+          "title": "Memory Limit Utilization > 95%",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}]) * 100 > 95"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 54,
+        "widget": {
+          "title": "Workqueue Depth > 100",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) ({\"__name__\"=\"external.googleapis.com/prometheus/workqueue_depth\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}) > 100"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "widget": {
+          "title": "Pod Restarts > 10 in 1h",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_restarts_total\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[1h])) > 10"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster_name",
+                "visible": true
+              },
+              {
+                "column": "container_name",
+                "visible": true
+              }
+            ]
+          }
+        },
+        "width": 24,
+        "height": 18,
+        "xPos": 0,
+        "yPos": 72
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 72,
+        "widget": {
+          "title": "CPU Consumption",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (rate({\"__name__\"=\"kubernetes.io/anthos/container/cpu/core_usage_time\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}]))"
+                },
+                "plotType": "LINE"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 0,
+        "yPos": 90,
+        "widget": {
+          "title": "Memory Consumption (GB)",
+          "xyChart": {
+            "chartOptions": {
+              "mode": "COLOR"
+            },
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/used_bytes\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}])) / 1024 / 1024 / 1024"
+                },
+                "plotType": "LINE"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "height": 18,
+        "width": 24,
+        "xPos": 24,
+        "yPos": 90,
+        "widget": {
+          "title": "Terminated Containers (OOM / Error)",
+          "timeSeriesTable": {
+            "dataSets": [
+              {
+                "timeSeriesQuery": {
+                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_terminated_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*\",\"reason\"!=\"Completed\"}[${__interval}]))"
+                }
+              }
+            ],
+            "columnSettings": [
+              {
+                "column": "cluster",
+                "visible": true
+              },
+              {
+                "column": "container",
+                "visible": true
+              },
+              {
+                "column": "reason",
+                "visible": true
+              },
+              {
+                "column": "value"
+              }
+            ]
+          }
         }
       }
     ]
