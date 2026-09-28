@@ -1,0 +1,60 @@
+# ClusterRole to allow users/ServiceAccounts to create Certificate and CertificateRequests
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cert-manager-cas-requester
+rules:
+  - apiGroups: ["cert-manager.io"]
+    resources: ["certificates", "certificaterequests"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+# ClusterRole to allow an identity (like a custom approver or an admin) 
+# to approve CertificateRequests targeted at GoogleCASIssuers.
+# Note: Cert-manager auto-approves all CertificateRequests by default unless 
+# the cert-manager-controller is started with `--controllers=*,-certificaterequests-approver`.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cert-manager-cas-approver
+rules:
+  - apiGroups: ["cert-manager.io"]
+    resources: ["signers"]
+    resourceNames: 
+      - "googlecasclusterissuers.cas-issuer.jetstack.io/*"
+      - "googlecasissuers.cas-issuer.jetstack.io/*"
+    verbs: ["approve"]
+  - apiGroups: ["cert-manager.io"]
+    resources: ["certificaterequests/status"]
+    verbs: ["update", "patch"]
+
+---
+# Optional: ClusterRoleBinding to bind the requester role to a specific group of users
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: developer-cas-requester-binding
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: cert-manager-cas-requester
+# subjects:
+#   - kind: Group
+#     name: "system:authenticated" # Or a specific developer group
+
+---
+# (Alternative) ClusterRole if using native Kubernetes CertificateSigningRequests (CSRs)
+# instead of cert-manager's CertificateRequest CRD.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-csr-cas-requester
+rules:
+  - apiGroups: ["certificates.k8s.io"]
+    resources: ["certificatesigningrequests"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: ["certificates.k8s.io"]
+    resources: ["signers"]
+    # Adjust this resource name to match your specific GoogleCASClusterIssuer name
+    resourceNames: ["googlecasclusterissuers.cas-issuer.jetstack.io/*"]
+    verbs: ["request", "approve"]
