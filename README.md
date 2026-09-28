@@ -21,7 +21,7 @@ gcloud privateca roots describe YOUR_ROOT_CA_NAME \
   --pool YOUR_POOL_NAME \
   --location YOUR_LOCATION \
   --project YOUR_PROJECT_ID \
-  --format="value(pemCaCertificates)" > ca.crt
+  --format="value(pemCaCertificates)" | sed 's/;//g' > ca.crt
 ```
 
 ### 2. Create the Kubernetes Secret
