@@ -1,0 +1,19 @@
+{
+  "displayName": "CAS & Cert-Manager Status",
+  "gridLayout": {
+    "widgets": [
+      {
+        "title": "Cert-Manager Pod Restarts",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "prometheusQuery": "increase(kubernetes.io/anthos/container/restart_count{namespace_name=~\"cert-manager\",pod_name=~\"cert-manager.*\"}[1h])"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
