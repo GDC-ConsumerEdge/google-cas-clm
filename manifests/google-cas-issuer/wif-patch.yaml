@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: google-cas-issuer-controller-manager
+  namespace: google-cas-issuer-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: manager
+          # Mount the Workload Identity Federation configuration and token
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/run/secrets/google/google-application-credentials.json
+          volumeMounts:
+            - name: gcp-ksa-token
+              mountPath: /var/run/secrets/tokens/gcp-ksa
+              readOnly: true
+            - name: wif-config
+              mountPath: /var/run/secrets/google
+              readOnly: true
+      volumes:
+        - name: gcp-ksa-token
+          projected:
+            defaultMode: 420
+            sources:
+              - serviceAccountToken:
+                  path: token
+                  expirationSeconds: 3600
+                  audience: YOUR_WIF_POOL_ID
+        - name: wif-config
+          configMap:
+            name: cas-wif-config

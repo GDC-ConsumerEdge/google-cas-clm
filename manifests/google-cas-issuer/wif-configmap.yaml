@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cas-wif-config
+  namespace: google-cas-issuer-system
+data:
+  google-application-credentials.json: |
+    {
+      "type": "external_account",
+      "audience": "identitynamespace:YOUR_PROJECT_ID.svc.id.goog:https://container.googleapis.com/v1/projects/YOUR_PROJECT_ID/locations/YOUR_LOCATION/clusters/YOUR_CLUSTER",
+      "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+      "token_url": "https://sts.googleapis.com/v1/token",
+      "credential_source": {
+        "file": "/var/run/secrets/tokens/gcp-ksa/token"
+      }
+    }
