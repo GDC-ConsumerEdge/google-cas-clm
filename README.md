@@ -2,6 +2,8 @@
 
 This repository contains generic assets required for integrating GDC Connected clusters with Google Certificate Authority Service (CAS) via cert-manager.
 
+> **Note:** The `cert-manager` namespace is managed by the Google engineering team on GDC Connected and is restricted from user access. Therefore, all add-on components in this repository (like `google-cas-issuer` and `trust-manager`) default to deploying into the `platform-clm` namespace instead.
+
 ## Directory Structure
 - \`terraform/cas-infrastructure/\`: Sets up CAS pools and CAs.
 - \`terraform/wif-setup/\`: Configures Workload Identity Federation (WIF) IAM bindings for access.

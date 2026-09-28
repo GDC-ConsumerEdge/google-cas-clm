@@ -7,3 +7,6 @@ resources:
   - bundle.yaml
 
 namespace: platform-clm
+
+patches:
+  - path: metrics-patch.yaml

@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   # Using the official Jetstack google-cas-issuer installation manifest
   - google-cas-issuer-v0.7.1.yaml
+  - service-metrics.yaml
   - wif-configmap.yaml
 
 # Patch the deployment to configure Workload Identity Federation (WIF)

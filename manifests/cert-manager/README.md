@@ -5,3 +5,6 @@ This directory contains resources related directly to the core cert-manager depl
 ## Files
 - `google-cas-issuer.yaml`: An example `GoogleCASClusterIssuer` custom resource. This instructs cert-manager on how to communicate with your Google Cloud CAS Pool. It references the project, location, and pool ID.
 - `rbac.yaml`: Contains Kubernetes `ClusterRole` definitions required for users or service accounts to request certificates (`certificaterequests` and `certificates`) and approve them via the CAS issuer.
+
+### Note on Namespaces
+The `cert-manager` namespace on GDC Connected is managed by the Google engineering team and is restricted from user access. Therefore, all add-on components (like `google-cas-issuer` and `trust-manager`) are deployed to the `platform-clm` namespace instead.
