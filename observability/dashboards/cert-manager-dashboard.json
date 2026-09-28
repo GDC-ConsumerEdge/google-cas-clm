@@ -22,7 +22,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"external.googleapis.com/prometheus/up\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) < 1"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"external.googleapis.com/prometheus/up\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}[${__interval}])) < 1"
                 }
               }
             ],
@@ -84,7 +84,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_waiting_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*\",\"reason\"=~\"CrashLoopBackOff|ImagePullBackOff|ErrImagePull\"}[${__interval}]))"
+                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_waiting_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\",\"reason\"=~\"CrashLoopBackOff|ImagePullBackOff|ErrImagePull\"}[${__interval}]))"
                 }
               }
             ],
@@ -146,7 +146,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"external.googleapis.com/prometheus/controller_runtime_conversion_webhook_panics_total\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) > 0"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"external.googleapis.com/prometheus/controller_runtime_conversion_webhook_panics_total\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}[${__interval}])) > 0"
                 }
               }
             ],
@@ -181,7 +181,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/cpu/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}])) * 100 > 95"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/cpu/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}[${__interval}])) * 100 > 95"
                 }
               }
             ],
@@ -212,7 +212,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[${__interval}]) * 100 > 95"
+                  "prometheusQuery": "avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/limit_utilization\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}[${__interval}]) * 100 > 95"
                 }
               }
             ],
@@ -243,7 +243,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) ({\"__name__\"=\"external.googleapis.com/prometheus/workqueue_depth\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}) > 100"
+                  "prometheusQuery": "sum by (cluster_name, container_name) ({\"__name__\"=\"external.googleapis.com/prometheus/workqueue_depth\",\"monitored_resource\"=\"k8s_container\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}) > 100"
                 }
               }
             ],
@@ -270,7 +270,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_restarts_total\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\"}[1h])) > 10"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (increase({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_restarts_total\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\"}[1h])) > 10"
                 }
               }
             ],
@@ -305,7 +305,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (rate({\"__name__\"=\"kubernetes.io/anthos/container/cpu/core_usage_time\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}]))"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (rate({\"__name__\"=\"kubernetes.io/anthos/container/cpu/core_usage_time\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}]))"
                 },
                 "plotType": "LINE"
               }
@@ -327,7 +327,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/used_bytes\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager|cert-manager.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}])) / 1024 / 1024 / 1024"
+                  "prometheusQuery": "sum by (cluster_name, container_name) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/container/memory/used_bytes\",\"namespace_name\"=~\"platform-clm|cert-manager\",\"container_name\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\",\"cluster_name\"=~\"${cluster.value}\"}[${__interval}])) / 1024 / 1024 / 1024"
                 },
                 "plotType": "LINE"
               }
@@ -346,7 +346,7 @@
             "dataSets": [
               {
                 "timeSeriesQuery": {
-                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_terminated_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*\",\"reason\"!=\"Completed\"}[${__interval}]))"
+                  "prometheusQuery": "sum by (cluster, container, reason) (avg_over_time({\"__name__\"=\"kubernetes.io/anthos/kube_pod_container_status_terminated_reason/gauge\",\"namespace\"=~\"platform-clm|cert-manager\",\"pod\"=~\"trust-manager.*|cert-manager.*|google-cas-issuer.*\",\"reason\"!=\"Completed\"}[${__interval}]))"
                 }
               }
             ],

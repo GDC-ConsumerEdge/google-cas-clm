@@ -25,7 +25,7 @@ variable "cluster_project_number" {
 
 variable "kubernetes_namespace" {
   type        = string
-  default     = "cert-manager"
+  default     = "platform-clm"
 }
 
 variable "kubernetes_service_account" {

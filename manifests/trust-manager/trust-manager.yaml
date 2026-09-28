@@ -5,7 +5,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -622,14 +622,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
 ---
 # Source: trust-manager/templates/role.yaml
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -652,7 +652,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: trust-manager:leaderelection
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -676,7 +676,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -690,7 +690,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
 
 ---
 # Source: trust-manager/templates/rolebinding.yaml
@@ -698,7 +698,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: trust-manager:leaderelection
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -712,14 +712,14 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
 ---
 # Source: trust-manager/templates/metrics-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: trust-manager-metrics
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app: trust-manager
     app.kubernetes.io/component: metrics
@@ -744,7 +744,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app: trust-manager
     app.kubernetes.io/name: trust-manager
@@ -769,7 +769,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -840,7 +840,7 @@ spec:
           - "--leader-election-lease-duration=15s"
           - "--leader-election-renew-deadline=10s"
             # trust
-          - "--trust-namespace=cert-manager"
+          - "--trust-namespace=platform-clm"
             # webhook
           - "--webhook-host=0.0.0.0"
           - "--webhook-port=6443"
@@ -889,7 +889,7 @@ metadata:
     app.kubernetes.io/version: "v0.25.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
-    cert-manager.io/inject-ca-from-secret: "cert-manager/trust-manager-tls"
+    cert-manager.io/inject-ca-from-secret: "platform-clm/trust-manager-tls"
 webhooks:
   - name: trust.cert-manager.io
     rules:
@@ -910,7 +910,7 @@ webhooks:
 
       service:
         name: trust-manager
-        namespace: cert-manager
+        namespace: platform-clm
         path: /validate-trust-cert-manager-io-v1alpha1-bundle
 
 ---
@@ -919,7 +919,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0
@@ -927,9 +927,9 @@ metadata:
     app.kubernetes.io/version: "v0.25.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  commonName: "trust-manager.cert-manager.svc"
+  commonName: "trust-manager.platform-clm.svc"
   dnsNames:
-  - "trust-manager.cert-manager.svc"
+  - "trust-manager.platform-clm.svc"
   secretName: trust-manager-tls
   secretTemplate:
     annotations:
@@ -949,7 +949,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: trust-manager
-  namespace: cert-manager
+  namespace: platform-clm
   labels:
     app.kubernetes.io/name: trust-manager
     helm.sh/chart: trust-manager-v0.25.0

@@ -9,3 +9,5 @@ resources:
 # Patch the deployment to configure Workload Identity Federation (WIF)
 patches:
   - path: wif-patch.yaml
+
+namespace: platform-clm

@@ -1,8 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: google-cas-issuer-controller-manager
-  namespace: google-cas-issuer-system
+  name: cert-manager-google-cas-issuer
 spec:
   template:
     spec:

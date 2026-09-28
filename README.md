@@ -25,11 +25,11 @@ gcloud privateca roots describe YOUR_ROOT_CA_NAME \
 ```
 
 ### 2. Create the Kubernetes Secret
-Create a generic Secret in the `cert-manager` namespace (where `trust-manager` is typically running) using the downloaded file:
+Create a generic Secret in the `platform-clm` namespace (where `trust-manager` is typically running) using the downloaded file:
 
 ```bash
 kubectl create secret generic cas-root-ca \
-  --namespace cert-manager \
+  --namespace platform-clm \
   --from-file=ca.crt=ca.crt
 ```
 

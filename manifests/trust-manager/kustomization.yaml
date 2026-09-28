@@ -5,3 +5,5 @@ resources:
   # Using trust-manager official manifest
   - trust-manager.yaml
   - bundle.yaml
+
+namespace: platform-clm
