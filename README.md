@@ -11,6 +11,21 @@ This repository contains generic assets required for integrating GDC Connected c
 - \`observability/dashboards/\`: Generic cert-manager JSON dashboard.
 - \`manifests/cert-manager/\`: Sample Google CAS Issuer manifests.
 
+## Replacing Variables in Manifests
+
+Before applying the manifests, replace the placeholder variables with your actual configuration values using the following `sed` commands:
+
+```bash
+# Replace variables in the Google CAS Issuer manifest
+sed -i 's/YOUR_CAS_PROJECT_ID/<your-project-id>/g' manifests/cert-manager/google-cas-issuer.yaml
+sed -i 's/YOUR_CAS_LOCATION/<your-cas-location>/g' manifests/cert-manager/google-cas-issuer.yaml
+sed -i 's/YOUR_CAS_POOL_NAME/<your-cas-pool-name>/g' manifests/cert-manager/google-cas-issuer.yaml
+
+# Replace the Workload Identity Federation pool ID.
+# For GKE and GDC Connected clusters, this is typically formatted as: <CLUSTER_PROJECT_ID>.svc.id.goog
+sed -i 's/YOUR_WIF_POOL_ID/<your-wif-pool-id>/g' manifests/google-cas-issuer/wif-patch.yaml
+```
+
 ## Manual CA Distribution (Without External Secrets Operator)
 
 If you are not using External Secrets Operator (ESO) to automatically sync the CA certificate from Google Secret Manager to Kubernetes, you must manually create a Kubernetes Secret containing the CA Root Certificate. `trust-manager` uses this Secret as the source for distributing the trust bundle across your cluster namespaces.
