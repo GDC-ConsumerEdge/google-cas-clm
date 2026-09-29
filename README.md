@@ -26,6 +26,26 @@ sed -i 's/YOUR_CAS_POOL_NAME/<your-cas-pool-name>/g' manifests/cert-manager/goog
 sed -i 's/YOUR_WIF_POOL_ID/<your-wif-pool-id>/g' manifests/google-cas-issuer/wif-patch.yaml
 ```
 
+## Rendering Upstream Manifests
+
+The base manifests for `google-cas-issuer` and `trust-manager` included in this repository were rendered from their respective upstream Helm charts. They are currently synced to the latest stable versions.
+
+If you ever need to manually fetch and render newer upstream versions in the future, you can do so by running the following Helm commands:
+
+```bash
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+# Render the latest cert-manager-google-cas-issuer manifest
+helm template cert-manager-google-cas-issuer jetstack/cert-manager-google-cas-issuer > manifests/google-cas-issuer/google-cas-issuer-vX.Y.Z.yaml
+
+# Render the latest trust-manager manifest
+helm template trust-manager jetstack/trust-manager > manifests/trust-manager/trust-manager-vX.Y.Z.yaml
+```
+
+*Note: If you update to a new version, be sure to update the `resources:` section in the corresponding `kustomization.yaml` files to point to the new filename.*
+
 ## Manual CA Distribution (Without External Secrets Operator)
 
 If you are not using External Secrets Operator (ESO) to automatically sync the CA certificate from Google Secret Manager to Kubernetes, you must manually create a Kubernetes Secret containing the CA Root Certificate. `trust-manager` uses this Secret as the source for distributing the trust bundle across your cluster namespaces.
