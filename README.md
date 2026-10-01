@@ -1,4 +1,4 @@
-# Google CAS CLM generic repository
+# Certificate Lifecycle Management for GDC Connected with Google CAS
 
 This solution provides automated certificate management across large scale deployment on GDC connected using Google's Certificate Authority Service as a Private CA. This repository contains generic assets required for integrating GDC Connected clusters with Google Certificate Authority Service (CAS) via cert-manager.
 
