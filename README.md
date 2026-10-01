@@ -1,15 +1,19 @@
 # Google CAS CLM generic repository
 
-This repository contains generic assets required for integrating GDC Connected clusters with Google Certificate Authority Service (CAS) via cert-manager.
+This solution provides automated certificate management across large scale deployment on GDC connected using Google's Certificate Authority Service as a Private CA. This repository contains generic assets required for integrating GDC Connected clusters with Google Certificate Authority Service (CAS) via cert-manager.
 
 > **Note:** The `cert-manager` namespace is managed by the Google engineering team on GDC Connected and is restricted from user access. Therefore, all add-on components in this repository (like `google-cas-issuer` and `trust-manager`) default to deploying into the `platform-clm` namespace instead.
 
+## Architecture
+
+![CertManager Architecture with CAS on Edge](image.jpg)
+
 ## Directory Structure
-- \`terraform/cas-infrastructure/\`: Sets up CAS pools and CAs.
-- \`terraform/wif-setup/\`: Configures Workload Identity Federation (WIF) IAM bindings for access.
-- \`observability/alerts/\`: Sets up monitoring alerts for cert-manager.
-- \`observability/dashboards/\`: Generic cert-manager JSON dashboard.
-- \`manifests/cert-manager/\`: Sample Google CAS Issuer manifests.
+- `terraform/cas-infrastructure/`: Sets up CAS pools and CAs.
+- `terraform/wif-setup/`: Configures Workload Identity Federation (WIF) IAM bindings for access.
+- `observability/alerts/`: Sets up monitoring alerts for cert-manager.
+- `observability/dashboards/`: Generic cert-manager JSON dashboard.
+- `manifests/cert-manager/`: Sample Google CAS Issuer manifests.
 
 ## Replacing Variables in Manifests
 
@@ -87,3 +91,7 @@ kubectl label namespace YOUR_APP_NAMESPACE trust-manager-sync="true"
 A complete sample application is provided to verify your CAS deployment. It spins up an Nginx server that gets a certificate from your CAS pool, and a curl client that connects to it securely using the root CA bundle distributed by `trust-manager`.
 
 For more details, see the [Sample App README](manifests/sample-app-test/README.md).
+
+## Disclaimer
+
+This project is not an official Google project. It is not supported by Google and Google specifically disclaims all warranties as to its quality, merchantability, or fitness for a particular purpose.
