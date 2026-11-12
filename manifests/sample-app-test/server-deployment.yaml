@@ -27,11 +27,28 @@ spec:
       labels:
         app: nginx-server
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: nginx
           image: nginx:latest
           ports:
-            - containerPort: 443
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 101
+            runAsGroup: 101
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             # Mount the custom NGINX config
             - name: nginx-config
@@ -42,6 +59,11 @@ spec:
             - name: tls
               mountPath: /etc/tls
               readOnly: true
+            # Writable directories required when running nginx as non-root
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
       volumes:
         - name: nginx-config
           configMap:
@@ -49,3 +71,7 @@ spec:
         - name: tls
           secret:
             secretName: nginx-server-tls
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
