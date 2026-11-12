@@ -20,7 +20,7 @@ metadata:
 data:
   default.conf: |
     server {
-        listen 443 ssl;
+        listen 8080 ssl;
         server_name nginx-server.sample-test-app.svc.cluster.local nginx-server.sample-test-app.svc;
 
         ssl_certificate /etc/tls/tls.crt;
